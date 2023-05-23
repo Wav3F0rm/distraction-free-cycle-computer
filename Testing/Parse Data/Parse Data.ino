@@ -5,8 +5,11 @@ HardwareSerial gpsSerial(1);  // select which UART bridge to use, UART0 is used 
 TinyGPSPlus gps;  // creates identifier for TinyGPSPlus library
 
 int gpsSatellites = 0;
-double gpsLatitude = 0;
-double gpsLongitude = 0;
+
+float gpsLatitude = 0;
+float gpsLongitude = 0;
+
+int gpsSpeed = 0;
 
 
 void setup(){
@@ -21,8 +24,20 @@ void loop(){
   }
 
   if (gps.satellites.isUpdated()) {
-    numSatellites = gps.satellites.value();
+    gpsSatellites = gps.satellites.value();
     Serial.print("Satellites Connected: "); Serial.println(gpsSatellites);
   }
+
+  if (gps.location.isUpdated()) {
+    gpsLatitude = gps.location.lat(), 6;
+    gpsLongitude = gps.location.lng(), 6;
+    Serial.print("Latitude: "); Serial.println(gpsLatitude, 6);
+    Serial.print("Longitude: "); Serial.println(gpsLongitude, 6);
+  }
+
+  if (gps.speed.isUpdated()) {
+    gpsSpeed = gps.speed.kmph();
+    Serial.print("Speed: "); Serial.print(gpsSpeed); Serial.println("km/h");
+  }  
 
 }
