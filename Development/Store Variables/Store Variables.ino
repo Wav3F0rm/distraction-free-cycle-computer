@@ -61,14 +61,14 @@ void updateTelemtry() {
   gpsTime = gps.time.value();
 
   /*
-  speed -> distance calculation | every 5 seconds
+  speed -> distance calculation | every 3 seconds
   distance = speed/time => increment the distance by speed(kmh)/time(h)
-  1/720 provides exact value for 5000ms in hours
+  1/1200 provides exact value for 3000ms in hours
   */
   currentMillis = millis();
-  if ((currentMillis - lastMillis) > 5000) {
+  if ((currentMillis - lastMillis) > 3000) {
     lastMillis = currentMillis;
-    distTravelled += (gpsSpeed * (1/720));  
+    distTravelled += (gpsSpeed * (1/1200));  
   }
 
   // second since start
