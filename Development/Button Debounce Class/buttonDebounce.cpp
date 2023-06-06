@@ -1,5 +1,5 @@
-#include "Arduino.h”
-#include "buttonDebounce.h"
+#include <Arduino.h>
+#include <buttonDebounce.h>
 buttonDebounce::buttonDebounce(int pin) {
     pinMode(pin, INPUT);
     _pin = pin;
@@ -13,7 +13,7 @@ int buttonDebounce::buttonFunction(int debounceDelay) {
     // if button state changed
     if (reading != lastButtonState) {
         // reset timer
-        lastDebounceTime = milllis();
+        lastDebounceTime = millis();
     }
 
     // if action is for longer than delay
@@ -22,14 +22,9 @@ int buttonDebounce::buttonFunction(int debounceDelay) {
         // and button state has changed
         if (reading != buttonState) {
             buttonState = reading;  // set button state to new reading
-
-            // if button state shows button is pressed
-            if (buttonState == HIGH) {
-                return buttonState;  // return HIGH
-            }
         }
     }
 
     lastButtonState = reading;
-
+    return buttonState;
 }
