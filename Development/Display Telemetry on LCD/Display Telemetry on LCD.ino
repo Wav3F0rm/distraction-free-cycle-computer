@@ -8,33 +8,7 @@
 HardwareSerial gpsSerial(1);  // Select UART1, UART0 is used for USB transfer
 TinyGPSPlus gps; // Create identifier for TinyGPSPlus
 
-/*
-Data points to store:
-  - Number of Satellites | How many satellites the GPS module is connected to
-  - Speed
-  - Altitude
-  - Heading | Direction of travel from north, represented in degrees
-  - Time
-  - Distance Travelled | Approximate value taken from velocity over X time interval
-  - Time since start of ride/pace timer | simple 
-*/
-int gpsSatellites = 2;
-float gpsSpeed = 0;
-float gpsAltitude = 0;
-float gpsHeading = 0;
-int gpsHour = 0;
-int gpsMinute = 0;
-float distTravelled = 0;
-int secondSinceStart = 0;
 
-float gpsLastSpeed = 0;
-float gpsDisplaySpeed = 0;
-
-// helper variables to store times for speed > distance & secondSinceStart calculation
-unsigned long lastMillis = 0;
-unsigned long currentMillis = 0;
-unsigned long millisAtStart = 0;  // needs to be set by user
-bool timeStart = false;
 
 
 /*
