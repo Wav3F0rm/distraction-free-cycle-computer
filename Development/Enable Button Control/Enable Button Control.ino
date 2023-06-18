@@ -61,24 +61,25 @@ static unsigned char Vertical2_bits[] = {
    0x0c, 0x00, 0x03, 0x03, 0xc0, 0xc0, 0x00, 0x30, 0xf0, 0xff, 0x00, 0xfc, 0x3f, 0x00, 0xff, 0x0f };
 
 // Define reset symbol for the display
-#define Reset_width 9
+#define Reset_width 10
 #define Reset_height 8
 static unsigned char Reset_bits[] = {
-   0x1c, 0x00, 0x22, 0x00, 0x41, 0x00, 0x51, 0x01, 0xe1, 0x00, 0x41, 0x00,
-   0x02, 0x00, 0x3c, 0x00 };
+   0x3c, 0x00, 0x42, 0x00, 0x81, 0x00, 0xa1, 0x02, 0xc1, 0x01, 0x81, 0x00,
+   0x02, 0x00, 0x7c, 0x00 };
 
 // Define Play/Pause symbol for the display
-#define PlayPause_width 9
+#define PlayPause_width 10
 #define PlayPause_height 8
 static unsigned char PlayPause_bits[] = {
-   0x2a, 0x00, 0x6a, 0x00, 0xea, 0x00, 0xea, 0x01, 0xea, 0x01, 0xea, 0x00,
-   0x6a, 0x00, 0x2a, 0x00 };
+   0x5b, 0x00, 0xdb, 0x00, 0xdb, 0x01, 0xdb, 0x03, 0xdb, 0x03, 0xdb, 0x01,
+   0xdb, 0x00, 0x5b, 0x00 };
 
-#define Menu_width 9
+// Define Menu symbol for the display
+#define Menu_width 10
 #define Menu_height 8
 static unsigned char Menu_bits[] = {
-   0xff, 0x01, 0xff, 0x01, 0x00, 0x00, 0xff, 0x01, 0xff, 0x01, 0x00, 0x00,
-   0xff, 0x01, 0xff, 0x01 };
+   0xff, 0x03, 0xff, 0x03, 0x00, 0x00, 0xff, 0x03, 0xff, 0x03, 0x00, 0x00,
+   0xff, 0x03, 0xff, 0x03 };
 
 
 /*
@@ -181,9 +182,9 @@ void loop(void) {
 // 
 void updateLCD() {
   u8g2.drawXBM(0, 0, Vertical2_width, Vertical2_height, Vertical2_bits);  // x-position, y-position, w-dimension, h-dimension, bitmap
-  u8g2.drawXBM(6, 118, Reset_width, Reset_height, Reset_bits);  // x-position, y-position, w-dimension, h-dimension, bitmap
-  u8g2.drawXBM(28, 118, PlayPause_width, PlayPause_height, PlayPause_bits);  // x-position, y-position, w-dimension, h-dimension, bitmap
-  u8g2.drawXBM(50, 118, Menu_width, Menu_height, Menu_bits);  // x-position, y-position, w-dimension, h-dimension, bitmap
+  u8g2.drawXBM(5, 118, Reset_width, Reset_height, Reset_bits);  // x-position, y-position, w-dimension, h-dimension, bitmap
+  u8g2.drawXBM(27, 118, PlayPause_width, PlayPause_height, PlayPause_bits);  // x-position, y-position, w-dimension, h-dimension, bitmap
+  u8g2.drawXBM(49, 118, Menu_width, Menu_height, Menu_bits);  // x-position, y-position, w-dimension, h-dimension, bitmap
   
   u8g2.setFontPosBottom();
   u8g2.setFontDirection(0);
@@ -242,8 +243,6 @@ void updateTelemetry() {
   } else {
     gpsDisplaySpeed = gpsSpeed;
   }
-
-  gpsDisplaySpeed = 8.7;
 
   if (togglePlayPause == true) {
     /*
