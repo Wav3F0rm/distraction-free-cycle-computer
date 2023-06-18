@@ -74,7 +74,11 @@ float gpsSpeed = 0;
 int gpsHour = 0;
 int gpsMinute = 0;
 char gpsTime[50];
+
 float distTravelled = 0;
+
+unsigned int i = 0;
+float totalSpeed = 0;
 float averageSpeed = 0;
 
 float gpsLastSpeed = 0;
@@ -140,7 +144,7 @@ void updateLCD() {
   u8g2.drawStr(38, 46, "km/h");
   
   u8g2.drawStr(5, 69, gpsTime);  // Draw time in first box
-  u8g2.drawStr(5, 84, (String(distTravelled, 1) + " km").c_str());  // Draw distance travelled in second box
+  u8g2.drawStr(5, 84, (String(distTravelled, 2) + " km").c_str());  // Draw distance travelled in second box
   u8g2.drawStr(5, 99, (String(averageSpeed, 1) + " km/h").c_str());  // Draw average speed in third box
   u8g2.drawStr(5, 114, durationFormatted);  // Draw duration of ride speed in third box
 }
@@ -190,22 +194,19 @@ void updateTelemetry() {
 
   /*
   speed -> distance calculation | every 3 seconds
-  distance = speed/time => increment the distance by speed(kmh)/time(h)
-  1/1200 provides exact value for 3000ms in hours
+  if the time between the last cycle and the current cycle is > 3000ms / 3s
+  set last cycle time to current cycle time
+  gpsDisplaySpeed(km/h) -> m/s * time in seconds = meters travelled since last cycle -> km travelled since last cycle
   */
   currentMillis = millis();
-  if ((currentMillis - lastMillis) > 3000) {
+  if((millis() - lastMillis) > 3000){
+    i ++;
     lastMillis = currentMillis;
-    distTravelled += (gpsDisplaySpeed * (1/1200));
-  }
+    distTravelled += ((gpsDisplaySpeed/3.6)*3)/1000;
 
-  // Derive Average speed, distance travelled/time in hours
-  if (distTravelled > 0) {
-    averageSpeed = distTravelled/(millis()/3600000);
-  } else {
-    averageSpeed = 0;
-    }
-  
+    totalSpeed += gpsDisplaySpeed;
+    averageSpeed = totalSpeed/i;
+  }
 
   // Length of ride
   durationSeconds = currentMillis / 1000;
@@ -215,7 +216,7 @@ void updateTelemetry() {
   durationSeconds %= 60;
   durationMinutes %= 60;
   durationHours %= 24;
-  sprintf(durationFormatted, "%02d:%02d:%02d", durationHours, durationMinutes, durationSeconds);  
+  sprintf(durationFormatted, "%02d:%02d:%02d", durationHours, durationMinutes, durationSeconds);
 
   gpsLastSpeed = gpsSpeed;
 }
