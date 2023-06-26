@@ -123,6 +123,14 @@ buttonDebounce button3(38); int button3State;
 
 bool togglePlayPause = 0;
 
+int tempSensor = 39;
+float temperatures[10];
+float temp;
+unsigned int x;
+
+int ledR = 32;
+int ledG = 33;
+int ledB = 25;
 
 // Initialise gpsSerial using HardwareSerial.
 HardwareSerial gpsSerial(1);  // Select UART1, UART0 is used for USB transfer
@@ -136,6 +144,11 @@ void setup(void) {
 
   u8g2.begin();
   u8g2.setContrast(lcdContrast);
+
+  // assign RGB led pins to channels, 12 kHz PWM, 8-bit resolution
+  ledcAttachPin(ledR, 1); ledcSetup(1, 12000, 8);
+  ledcAttachPin(ledG, 2); ledcSetup(2, 12000, 8);
+  ledcAttachPin(ledB, 3); ledcSetup(3, 12000, 8);
   
 }
 
@@ -160,9 +173,14 @@ void loop(void) {
     togglePlayPause = !togglePlayPause;
     if ((togglePlayPause == true) && (totalSpeed == 0)) {
       startMillis = millis();
-    }    
+    }
   }
-  
+
+  if (gpsSatellites >= 3) {
+    setRGBLED(0, 255, 0);
+  } else {
+    setRGBLED(255, 0, 0);
+  }
 
   /*
   everytime satellite value is updated (everytime GNSS module recieves a new set of NMEA sequences)
@@ -199,6 +217,9 @@ void updateLCD() {
   u8g2.drawStr(5, 84, (String(distTravelled, 2) + " km").c_str());  // Draw distance travelled in second box
   u8g2.drawStr(5, 99, (String(averageSpeed, 1) + " km/h").c_str());  // Draw average speed in third box
   u8g2.drawStr(5, 114, durationFormatted);  // Draw duration of ride speed in third box
+
+  u8g2.setFont(u8g2_font_5x7_tf);
+  u8g2.drawStr(40, 69, (String(temp, 0) + "\xb0" + "C").c_str());  // Draw temperature in first box
 }
 
 void updateTelemetry() {
@@ -274,4 +295,30 @@ void updateTelemetry() {
 
   sprintf(durationFormatted, "%02d:%02d:%02d", durationHours, durationMinutes, durationSeconds);
   gpsLastSpeed = gpsSpeed;
+
+  temp = tempReading();  
+}
+
+float tempReading() {
+  // put your main code here, to run repeatedly:
+  float ADCVal = analogRead(tempSensor);
+  float tempC = ADCVal / 10;
+  //Serial.println(tempC);
+
+  temperatures[x] = tempC;
+  x ++;
+  if (x > 9) {
+    x = 0;
+  }
+
+  float sum = temperatures[0] + temperatures[1] + temperatures[2] + temperatures[3] + temperatures[4] + temperatures[5] + temperatures[6] + temperatures[7] + temperatures[8] + temperatures[9];
+  float avgTemp = ((sum/10) - 2);
+
+  return avgTemp;
+}
+
+void setRGBLED(int R, int G, int B) {
+  ledcWrite(1, R);
+  ledcWrite(2, G);
+  ledcWrite(3, B);
 }
