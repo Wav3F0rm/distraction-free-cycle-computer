@@ -56,6 +56,17 @@
         app:layout_constraintStart_toEndOf="@+id/toggle"
         app:layout_constraintTop_toBottomOf="@+id/totalTime" />
 
+    <Button
+        android:id="@+id/BTConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:onClick="onConnectBluetoothClick"
+        android:text="Connect Bluetooth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toggle" />
+
     <TextView
         android:id="@+id/songName"
         android:layout_width="wrap_content"
@@ -87,15 +98,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artistName" />
 
-    <Button
-        android:id="@+id/BTConnect"
+    <TextView
+        android:id="@+id/deviceName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Connect Bluetooth"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="50dp"
+        android:text="Device Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggle" />
+        app:layout_constraintTop_toBottomOf="@+id/BTConnect" />
+
+    <TextView
+        android:id="@+id/deviceMac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Device Address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deviceName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

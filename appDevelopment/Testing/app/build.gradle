@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace 'com.TJM.cyclecomputer'
-    compileSdk 33
+    namespace 'com.tjm.testapp'
+    compileSdk 32
 
     defaultConfig {
-        applicationId "com.TJM.cyclecomputer"
-        minSdk 31
-        targetSdk 33
+        applicationId "com.tjm.testapp"
+        minSdk 28
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -29,22 +29,16 @@ android {
 }
 
 dependencies {
-    // implement user added dependencies
-    implementation fileTree(dir: 'libs', include: ['*.aar'])
-
-    // implement android serial bluetooth library by Harry Phillips
-    implementation 'com.github.harry1453:android-bluetooth-serial:v1.1.2'
+    implementation 'com.github.harry1453:android-bluetooth-serial:v1.1'
 
     // RxJava is also required.
     implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
-    // default dependencies for android application
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation "com.google.code.gson:gson:2.8.6"
 }
