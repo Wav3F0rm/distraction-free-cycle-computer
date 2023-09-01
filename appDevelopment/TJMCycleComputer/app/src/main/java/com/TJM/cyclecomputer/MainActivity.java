@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     String BTmac;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    SimpleBluetoothDeviceInterface deviceInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
 
         TextView dispTotalTime = findViewById(R.id.totalTime);
         dispTotalTime.setText(totalTime);
+
+        String metadataPacket = '@' + songName + '#' + artistName + '$' + totalTime + '&';
+        deviceInterface.sendMessage(metadataPacket);
     }
 
     //
@@ -181,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("My Bluetooth App", device.getName());
                 Log.d("My Bluetooth App", device.getAddress());
 
-                if (Objects.equals(device.getName(), "ESP32testAA")) {
+                if (Objects.equals(device.getName(), "CycleComputer")) {
                     Log.d("My Bluetooth App", "Device Paired! :0");
                     BTName = device.getName();
                     BTmac = device.getAddress();
@@ -202,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onBTConnected(BluetoothSerialDevice connectedDevice) {
         // Code
-        SimpleBluetoothDeviceInterface deviceInterface = connectedDevice.toSimpleDeviceInterface();  // Keep instance of device
+        deviceInterface = connectedDevice.toSimpleDeviceInterface();  // Keep instance of device
         deviceInterface.setListeners(this::onBTMessageReceived, this::onBTMessageSent, this::onBTError);  // Listen to bluetooth events
         Log.d("My Bluetooth App", "Successfully Connected");
         deviceInterface.sendMessage("Successfully Connected!");  // Send confirmation message
